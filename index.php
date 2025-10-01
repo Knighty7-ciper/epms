@@ -34,28 +34,48 @@
     <title>Doodle Poultry Login</title>
 </head>
 <body>
-    <main class="auth__page">
-        <section class="auth__card">
-            <header class="auth__header">
-                <h1 class="auth__title">Doodle Poultry</h1>
-                <p class="auth__subtitle">Admin sign in</p>
-            </header>
-            <?php
-                if(isset($message)){
-                    echo '<div class="auth__alert">' . $message . '</div>';
-                }
-            ?>
-            <form class="auth__form" action="" method="post" novalidate>
-                <div class="form__group">
-                    <label for="Username">Username</label>
-                    <input id="Username" type="text" name="Username" placeholder="Enter username" autocomplete="username">
-                </div>
-                <div class="form__group">
-                    <label for="Password">Password</label>
-                    <input id="Password" type="password" name="Password" placeholder="Enter password" autocomplete="current-password">
-                </div>
-                <button class="button button--primary" type="submit" name="login">Login</button>
-            </form>
+    <main class="login-layout">
+        <section class="login-layout__showcase">
+            <div class="login-showcase__overlay"></div>
+            <div class="login-showcase__content">
+                <span class="login-showcase__tag">Doodle Poultry</span>
+                <h1 class="login-showcase__headline">Manage your poultry operations with confidence</h1>
+                <p class="login-showcase__description">Track bird health, monitor feed, and stay aligned with production goals in one secure dashboard.</p>
+                <ul class="login-showcase__features">
+                    <li><span aria-hidden="true">&#10003;</span><span>Daily flock and mortality updates</span></li>
+                    <li><span aria-hidden="true">&#10003;</span><span>Automated feed consumption monitoring</span></li>
+                    <li><span aria-hidden="true">&#10003;</span><span>Sales insights for smarter decisions</span></li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="login-layout__form">
+            <div class="login-panel">
+                <header class="login-panel__header">
+                    <span class="login-panel__logo" aria-hidden="true">DP</span>
+                    <div class="login-panel__heading-group">
+                        <h2 class="login-panel__title">Sign in to Doodle Poultry</h2>
+                        <p class="login-panel__subtitle">Enter your administrator credentials to continue</p>
+                    </div>
+                </header>
+                <?php if(!empty($message)) { ?>
+                    <div class="login-panel__alert" role="alert"><?php echo $message; ?></div>
+                <?php } ?>
+                <form class="login-panel__form" action="" method="post" novalidate>
+                    <div class="login-field">
+                        <label class="login-field__label" for="Username">Username</label>
+                        <input class="login-field__input" id="Username" type="text" name="Username" placeholder="Enter username" autocomplete="username">
+                    </div>
+                    <div class="login-field">
+                        <label class="login-field__label" for="Password">Password</label>
+                        <input class="login-field__input" id="Password" type="password" name="Password" placeholder="Enter password" autocomplete="current-password">
+                    </div>
+                    <button class="login-panel__button" type="submit" name="login">Sign in</button>
+                </form>
+                <footer class="login-panel__footer">
+                    <p>Need access? Please contact your system administrator.</p>
+                </footer>
+            </div>
         </section>
     </main>
 </body>

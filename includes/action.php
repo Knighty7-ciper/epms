@@ -367,82 +367,94 @@
 
     // Returning the total number of birds purchased
     $databaseObject = new Database();
-    $query = "SELECT SUM(NumberOfBirds) AS sum FROM `BirdsPurchase`"; 
+    $totalNumberOfBirds = 0;
+    $query = "SELECT SUM(NumberOfBirds) AS sum FROM `BirdsPurchase`";
     $result = $databaseObject->connect()->query($query);
-    while($row = mysqli_fetch_assoc($result)){
-        $totalNumberOfBirds = $row['sum'];
-    };
+    if($result && ($row = mysqli_fetch_assoc($result))){
+        $totalNumberOfBirds = (float) ($row['sum'] ?? 0);
+    }
 
     // Returning the total number of eggs
+    $totalNumberOfEggs = 0;
     $query = "SELECT SUM(NumberOfEggs) AS sum FROM `Production`";
     $result = $databaseObject->connect()->query($query);
-    while($row = mysqli_fetch_assoc($result)){
-        $totalNumberOfEggs = $row['sum'];
+    if($result && ($row = mysqli_fetch_assoc($result))){
+        $totalNumberOfEggs = (float) ($row['sum'] ?? 0);
     }
 
     // Returning the mortality rate
-
+    $totalDeaths = 0;
     $query = "SELECT SUM(Deaths) AS sum FROM `BirdsMortality`";
     $result = $databaseObject->connect()->query($query);
-    while($row = mysqli_fetch_assoc($result)){
-        $totalDeaths = $row['sum'];
+    if($result && ($row = mysqli_fetch_assoc($result))){
+        $totalDeaths = (float) ($row['sum'] ?? 0);
     }
 
-    if($totalDeaths <= $totalNumberOfBirds){
-        $mortalityRate = round($totalDeaths / $totalNumberOfBirds * 100 , 1);
-        $totalNumberOfBirds = $totalNumberOfBirds - $totalDeaths;
+    $totalNumberOfBirds = max($totalNumberOfBirds, 0);
+    $totalDeaths = max($totalDeaths, 0);
+    $cappedDeaths = min($totalDeaths, $totalNumberOfBirds);
+
+    if($totalNumberOfBirds > 0){
+        $mortalityRate = round($cappedDeaths / $totalNumberOfBirds * 100, 1);
     }else{
         $mortalityRate = 0;
     }
-    $remainingBirds = $totalNumberOfBirds - $totalDeaths;
-    
+    $remainingBirds = $totalNumberOfBirds - $cappedDeaths;
+
     // Returning the total number of wages
+    $totalWages = 0;
     $query = "SELECT SUM(Salary) AS sum FROM `Employee`";
     $result = $databaseObject->connect()->query($query);
-    while($row = mysqli_fetch_assoc($result)){
-        $totalWages = $row['sum'];
+    if($result && ($row = mysqli_fetch_assoc($result))){
+        $totalWages = (float) ($row['sum'] ?? 0);
     }
 
     // Returning total revenue
+    $sales = 0;
     $query = "SELECT SUM(Revenue) AS sum FROM `Sales`";
     $result = $databaseObject->connect()->query($query);
-    while($row = mysqli_fetch_assoc($result)){
-        $sales = $row['sum'];
+    if($result && ($row = mysqli_fetch_assoc($result))){
+        $sales = (float) ($row['sum'] ?? 0);
     }
 
     // Returning remaining feed in the stock
+    $totalFeedPurchased = 0;
     $query = "SELECT SUM(Quantity) AS sum FROM `FeedPurchase`";
     $result = $databaseObject->connect()->query($query);
-    while($row = mysqli_fetch_assoc($result)){
-        $totalFeedPurchased = $row['sum'];
+    if($result && ($row = mysqli_fetch_assoc($result))){
+        $totalFeedPurchased = (float) ($row['sum'] ?? 0);
     }
 
+    $totalFeedConsumed = 0;
     $query = "SELECT SUM(Quantity) AS sum FROM `FeedConsumption`";
     $result = $databaseObject->connect()->query($query);
-    while($row = mysqli_fetch_assoc($result)){
-        $totalFeedConsumed = $row['sum'];
+    if($result && ($row = mysqli_fetch_assoc($result))){
+        $totalFeedConsumed = (float) ($row['sum'] ?? 0);
     }
-    $remainingFeed = $totalFeedPurchased - $totalFeedConsumed;
+    $remainingFeed = max($totalFeedPurchased - $totalFeedConsumed, 0);
 
     // Returning number of eggs available for sale
+    $totalEggsProduced = 0;
     $query = "SELECT SUM(NumberOfEggs) AS sum FROM `Production`";
     $result = $databaseObject->connect()->query($query);
-    while($row = mysqli_fetch_assoc($result)){
-        $totalEggsProduced = $row['sum'];
+    if($result && ($row = mysqli_fetch_assoc($result))){
+        $totalEggsProduced = (float) ($row['sum'] ?? 0);
     }
 
+    $totalEggsSold = 0;
     $query = "SELECT SUM(NumberOfEggs) AS sum FROM `Sales`";
     $result = $databaseObject->connect()->query($query);
-    while($row = mysqli_fetch_assoc($result)){
-        $totalEggsSold = $row['sum'];
+    if($result && ($row = mysqli_fetch_assoc($result))){
+        $totalEggsSold = (float) ($row['sum'] ?? 0);
     }
-    $remainingEggs = $totalEggsProduced - $totalEggsSold;
+    $remainingEggs = max($totalEggsProduced - $totalEggsSold, 0);
 
     // Getting the total number of employees working in the farm
+    $totalNumberOfEmployees = 0;
     $query = "SELECT COUNT(*) AS sum FROM `Employee`";
     $result = $databaseObject->connect()->query($query);
-    while($row = mysqli_fetch_assoc($result)){
-        $totalNumberOfEmployees = $row['sum'];
+    if($result && ($row = mysqli_fetch_assoc($result))){
+        $totalNumberOfEmployees = (int) ($row['sum'] ?? 0);
     }
 
 ?>
